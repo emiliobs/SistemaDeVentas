@@ -17,9 +17,16 @@ namespace SistemaDeVentas
 {
     public class Startup
     {
+       
         public Startup(IConfiguration configuration)
         {
+
             Configuration = configuration;
+
+           
+
+           
+
         }
 
         public IConfiguration Configuration { get; }
@@ -37,8 +44,11 @@ namespace SistemaDeVentas
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -69,6 +79,11 @@ namespace SistemaDeVentas
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
         }
+
+       
+
     }
 }
