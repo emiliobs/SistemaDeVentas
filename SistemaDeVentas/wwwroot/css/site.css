@@ -1,18 +1,17 @@
-﻿.card {
-
-    margin-top : 70px;
-    max-width:40%;
-    border:1px solid #d7d7d7;
-    border-radius:5px;
-    padding:10px;
+﻿
+.card {
+    max-width:60%;
+}
+/* Hide/rearrange for smaller screens */
+@media screen (max-width: 800px) {
+    .container {
+        max-width: 60%;
+    }
 }
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+
  }
 
 
