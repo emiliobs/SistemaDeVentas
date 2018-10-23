@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using SistemaDeVentas.Library;
 using SistemaDeVentas.Models;
 using SistemaDeVentas.ViewModel;
 
@@ -14,10 +15,13 @@ namespace SistemaDeVentas.Controllers
 {
     public class HomeController : Controller
     {
+        private Usuarios usuarios;
         private readonly IServiceProvider serviceProvider;
-        public HomeController(IServiceProvider serviceProvider)
+        public HomeController(IServiceProvider serviceProvider, UserManager<IdentityUser> userManager,
+                              SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this.serviceProvider = serviceProvider;
+            this.usuarios = new Usuarios(userManager, signInManager,roleManager);
            
         }
         public async Task<IActionResult> Index()
@@ -32,7 +36,7 @@ namespace SistemaDeVentas.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                List<object[]> listObject = await this.usuarios.UserLogin(model.Input.Email, model.Input.Password);
             }
 
             return View(model);
