@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -22,6 +25,15 @@
     <nav>
         <div class="nav-wrapper cyan darken-4">
             <a href="#" class="brand-logo center">Sistema de Ventas & Facturación.</a>
+            @*aqui verifico si un usuario esta iniciando sesión*@
+            @if (SignInManager.IsSignedIn(User))
+            {
+              <div id="menuNavBar1">
+                 <ul class="right hide-on-med-and-down">
+                     <a asp-action="SessionClose" asp-controller="Usuarios">Salir.</a>
+                 </ul>
+              </div>
+            }
         </div>
     </nav>
 
