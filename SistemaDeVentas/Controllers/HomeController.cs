@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using SistemaDeVentas.Models;
+using SistemaDeVentas.ViewModel;
 
 namespace SistemaDeVentas.Controllers
 {
@@ -22,6 +24,18 @@ namespace SistemaDeVentas.Controllers
         {
               //await CreaateRole(this.serviceProvider);
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+
+            return View(model);
         }
 
         public IActionResult About()
