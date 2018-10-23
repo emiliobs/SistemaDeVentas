@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using SistemaDeVentas.Areas.Principal.Controllers;
 using SistemaDeVentas.Library;
 using SistemaDeVentas.Models;
 using SistemaDeVentas.ViewModel;
@@ -17,12 +19,16 @@ namespace SistemaDeVentas.Controllers
     {
         private Usuarios usuarios;
         private readonly IServiceProvider serviceProvider;
+
+        LoginViewModel loginViewModel;
         public HomeController(IServiceProvider serviceProvider, UserManager<IdentityUser> userManager,
                               SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this.serviceProvider = serviceProvider;
             this.usuarios = new Usuarios(userManager, signInManager,roleManager);
-           
+
+         
+
         }
         public async Task<IActionResult> Index()
         {
@@ -34,9 +40,27 @@ namespace SistemaDeVentas.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(LoginViewModel model)
         {
+          
+
             if (ModelState.IsValid)
             {
                 List<object[]> listObject = await this.usuarios.UserLogin(model.Input.Email, model.Input.Password);
+
+                object[] objects = listObject[0];   
+                var identityError = (IdentityError)objects[0];
+                model.ErrorMessage = identityError.Description;
+
+                if (model.ErrorMessage.Equals("True"))
+                {
+                   
+                    var data = JsonConvert.SerializeObject(objects[1]);
+                    return RedirectToAction(nameof(PrincipalController.Index), "Principal");
+
+                }
+                else
+                {
+                    return View(model);
+                }
             }
 
             return View(model);
