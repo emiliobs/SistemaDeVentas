@@ -51,6 +51,15 @@ namespace SistemaDeVentas
                 options.LoginPath = "/Home/Index";
             });
 
+            //Servicio de pagina deerror:
+            services.AddSession(options => {
+
+                //variables de sesión
+                options.Cookie.Name = ".systemVentas.Session";
+                options.IdleTimeout = TimeSpan.FromHours(12);
+
+            });
+
             //services.AddDefaultIdentity<IdentityUser>()
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -60,6 +69,10 @@ namespace SistemaDeVentas
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+            //aqui le digo a la apliccion que biy a usar variables de session:
+            app.UseSession();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,6 +83,9 @@ namespace SistemaDeVentas
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            //aqui ejecuto el controlador error:
+            app.UseStatusCodePagesWithRedirects("/Error");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
