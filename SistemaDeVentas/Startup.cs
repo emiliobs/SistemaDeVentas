@@ -21,12 +21,9 @@ namespace SistemaDeVentas
         public Startup(IConfiguration configuration)
         {
 
-            Configuration = configuration;
+            Configuration = configuration;               
 
-           
-
-           
-
+             
         }
 
         public IConfiguration Configuration { get; }
@@ -45,7 +42,14 @@ namespace SistemaDeVentas
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //aqui configuro las cookis
+            services.ConfigureApplicationCookie(options => {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.LoginPath = "/Home/Index";
+            });
 
             //services.AddDefaultIdentity<IdentityUser>()
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
