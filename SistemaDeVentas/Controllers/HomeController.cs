@@ -19,11 +19,13 @@ namespace SistemaDeVentas.Controllers
     {
         private Usuarios usuarios;
         private readonly IServiceProvider serviceProvider;
+        private SignInManager<IdentityUser> singInManager;
+        //LoginViewModel loginViewModel;
 
-        LoginViewModel loginViewModel;
         public HomeController(IServiceProvider serviceProvider, UserManager<IdentityUser> userManager,
                               SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
+            this.singInManager = signInManager;
             this.serviceProvider = serviceProvider;
             this.usuarios = new Usuarios(userManager, signInManager,roleManager);
 
@@ -32,8 +34,18 @@ namespace SistemaDeVentas.Controllers
         }
         public async Task<IActionResult> Index()
         {
-              //await CreaateRole(this.serviceProvider);
-            return View();
+            //await CreaateRole(this.serviceProvider);
+
+            if (this.singInManager.IsSignedIn(User))
+            {
+                return RedirectToAction(nameof(PrincipalController.Index),"Principal");
+            }
+            else
+            {
+                return View();
+            }
+
+          
         }
 
         [HttpPost]

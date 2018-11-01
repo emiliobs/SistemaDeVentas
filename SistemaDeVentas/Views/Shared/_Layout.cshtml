@@ -51,41 +51,80 @@
             <a asp-area="Principal" asp-action="Index" asp-controller="Principal">Inicio.</a>
         </li>
         <li>
+            <a asp-area="Usuarios" asp-action="Index" asp-controller="Usuarios">Usuarios.</a> 
+        </li>
+        <li>
             <a asp-area="Usuarios" asp-action="SessionClose" asp-controller="Usuarios">Salir.</a>
         </li>
     </ul>
-    <partial name="_CookieConsentPartial" />
+   
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div id="menuNavBar2">
+                <div id="main">
+                    <div class="wrapper">
+                        <aside class="left" id="left-sidebar-nav">
+                            <ul id="slide-out" class="side-nav fixed leftside-navigation">
+                                <li class="user-details cyan darken-2">
+                                    <div class="row">
+                                        <div class="col col s5 m4 16">
+                                            <img src="~/images/foto/default.png" alt="User" id="foto2"
+                                                 class="circle responsive-img valign profile-image" />
+                                        </div>
+                                        <div class="col col s8 m8 18">
+                                            <p class="white-text" id="name2">@UserManager.GetUserName(User)</p>
+                                            <p class="white-text" id="role2">@ViewData["Roles"]</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collection">
+                                        <a asp-area="Principal" asp-controller="Principal" asp-action="Index" onclick="" id="enlace1"
+                                           class="collection-item">Inicio.</a>
+                                        <a asp-area="Usuarios" asp-controller="Usuarios" asp-action="Index" onclick="" id="enlace2"
+                                           class="collection-item">Usuarios.</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
+                </div>
+            </div>
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Sistema De Ventas By Emilio Barrera, London - UK.</p>
-        </footer>
-    </div>
+        }
+       
+        <partial name="_CookieConsentPartial" />
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/materialize/js/materialize.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        @*<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; 2018 - Sistema De Ventas By Emilio Barrera, London - UK.</p>
+            </footer>
+        </div>
+
+        <environment include="Development">
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            @*<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            <script src="~/materialize/js/materialize.js" asp-append-version="true"></script>
+        </environment>
+        <environment exclude="Development">
+            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery"
+                    crossorigin="anonymous"
+                    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+            </script>
+            @*<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
                     asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                     asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
                     crossorigin="anonymous"
                     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
             </script>*@
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+        </environment>
 
-    @RenderSection("Scripts", required: false)
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

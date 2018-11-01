@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SistemaDeVentas.Controllers;
-
-namespace SistemaDeVentas.Areas.Usuarios.Controllers
+﻿namespace SistemaDeVentas.Areas.Usuarios.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using SistemaDeVentas.Controllers;
+
+    [Authorize]
+   [Area("Usuarios")]
     public class UsuariosController : Controller
     {
         #region Attributtes

@@ -102,6 +102,7 @@ namespace SistemaDeVentas
                     template: "{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapAreaRoute("Principal", "Principal", "{controller=Principal}/{action=Index}/{id?}");
+                routes.MapAreaRoute("Usuarios", "Usuarios", "{controller=Usuarios}/{action=Index}/{id?}");
 
             });
 
