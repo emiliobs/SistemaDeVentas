@@ -84,8 +84,10 @@ namespace SistemaDeVentas
                 app.UseHsts();
             }
 
+            // app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/Error/Error", "?statusCode={0}");
             //aqui ejecuto el controlador error:
-            app.UseStatusCodePagesWithRedirects("/Error");
+           // app.UseStatusCodePagesWithRedirects("/Error");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

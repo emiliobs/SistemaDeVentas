@@ -8,9 +8,13 @@ namespace SistemaDeVentas.Controllers
 {
     public class ErrorController : Controller
     {
-        [Route("/Error")] 
-        public IActionResult Error()
+        //[Route("/Error")] 
+        public IActionResult Error(int? statusCode = null)
         {
+            if (statusCode.Value == 404 || statusCode.Value == 500)
+            {
+                ViewData["Error"] = statusCode.ToString();
+            }
             return View();
         }
     }
