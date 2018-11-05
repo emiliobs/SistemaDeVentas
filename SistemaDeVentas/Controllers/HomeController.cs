@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,55 +18,67 @@ namespace SistemaDeVentas.Controllers
 {
     public class HomeController : Controller
     {
-        private Usuarios usuarios;
+        #region Atributtes
+        private LUsuarios usuarios;
         private readonly IServiceProvider serviceProvider;
         private SignInManager<IdentityUser> singInManager;
-        //LoginViewModel loginViewModel;
+        //LoginViewModel loginViewModel; 
+        #endregion
+
+        #region Constructors
 
         public HomeController(IServiceProvider serviceProvider, UserManager<IdentityUser> userManager,
                               SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this.singInManager = signInManager;
             this.serviceProvider = serviceProvider;
-            this.usuarios = new Usuarios(userManager, signInManager,roleManager);
+            this.usuarios = new LUsuarios(userManager, signInManager, roleManager);
 
-         
+
 
         }
+        #endregion
+
+        #region Methods
         public async Task<IActionResult> Index()
         {
             //await CreaateRole(this.serviceProvider);
 
             if (this.singInManager.IsSignedIn(User))
             {
-                return RedirectToAction(nameof(PrincipalController.Index),"Principal");
+                return RedirectToAction(nameof(PrincipalController.Index), "Principal");
             }
             else
             {
                 return View();
             }
 
-          
+
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Index(LoginViewModel model)
         {
-          
+
 
             if (ModelState.IsValid)
             {
                 List<object[]> listObject = await this.usuarios.UserLogin(model.Input.Email, model.Input.Password);
 
-                object[] objects = listObject[0];   
+                object[] objects = listObject[0];
                 var identityError = (IdentityError)objects[0];
                 model.ErrorMessage = identityError.Description;
 
                 if (model.ErrorMessage.Equals("True"))
                 {
-                   
+
+                    //aqui obtengo la informacion del usuario que inicio session
                     var data = JsonConvert.SerializeObject(objects[1]);
+
+                    //aqui utilizo ya las variable de session:
+                    HttpContext.Session.SetString("User", data);
+
                     return RedirectToAction(nameof(PrincipalController.Index), "Principal");
 
                 }
@@ -134,6 +147,7 @@ namespace SistemaDeVentas.Controllers
 
                 messsage = ex.Message;
             }
-        }
+        } 
+        #endregion
     }
 }

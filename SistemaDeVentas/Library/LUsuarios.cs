@@ -1,27 +1,29 @@
 ﻿namespace SistemaDeVentas.Library
 {
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Newtonsoft.Json;
     using SistemaDeVentas.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    public class Usuarios:ListObject
+    public class LUsuarios:ListObject
     {
         #region Constructor
-        public Usuarios()
+        public LUsuarios()
         {
 
         }
 
-        public Usuarios(RoleManager<IdentityRole> roleManager)
+        public LUsuarios(RoleManager<IdentityRole> roleManager)
         {
             this.roleManager = roleManager;
             this.usersRole = new UsersRoles();
 
         }
 
-        public Usuarios(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, 
+        public LUsuarios(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, 
                        RoleManager<IdentityRole> roleManager)            
         {
             this.userManager = userManager;
@@ -83,6 +85,27 @@
 
             return dataList;
            
+        }
+
+        public string UserData(HttpContext httpContext)
+        {
+            var role = string.Empty;
+
+            //aqui capturo la llave
+            var user = httpContext.Session.GetString("User");
+
+            if (user != null)
+            {
+                UserData userData = JsonConvert.DeserializeObject<UserData>(user.ToString());
+                role = userData.Role;
+            }
+            else
+            {
+                role = "No Data!";
+            }
+
+            return role;
+
         }
         #endregion
     }
