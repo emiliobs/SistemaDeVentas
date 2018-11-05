@@ -17,7 +17,11 @@
         #endregion
 
         #region Constructors
-
+        //public LoginViewModel()
+        //{
+        //    Input.Email = "emilio@gmail.com";
+        //    Input.Password = "Eabs123.";
+        //}
         #endregion
 
         #region Methods

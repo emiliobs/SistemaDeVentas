@@ -31,10 +31,17 @@
 
         public IActionResult Index()
         {
-            // ViewData["Roles"] = this.usuarios.UserData(HttpContext);
-            ViewData["Roles"] = this.usuarios.UserData(HttpContext);
+            //verifico si un usurio ha iniciado session:
+            if (this.signInManager.IsSignedIn(User))
+            {
+                ViewData["Roles"] = this.usuarios.UserData(HttpContext);
 
-            return View();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
 
 
