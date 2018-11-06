@@ -10,6 +10,7 @@
         #region Attributes
         public string description, code;
         public List<SelectListItem> userRolesList;
+        public LUsuarios usuarios;
         public UserData usersData;
         public UsersRoles usersRole;
         public IdentityError identityError;

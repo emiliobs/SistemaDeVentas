@@ -9,6 +9,7 @@ $().ready(() => {
     principal.userLink(URLactual);
     //alert(URLactual);
 
-    $('.sidenav').sidenav();
+   // $('.sidenav').sidenav();
+    M.AutoInit();
   
 });

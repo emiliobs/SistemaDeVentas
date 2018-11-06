@@ -76,7 +76,11 @@
                         <span asp-validation-for="InputModelRegistrar.Password" class="text-danger" style="color:red;"></span>
                     </div>
                 </div>
-
+               <div class="row">
+                   <div class="input-field col s12">
+                       @Html.DropDownList("Role", new SelectList(Model.RoleList,"Value","Text"),"[Seleccione un Role.]",null)
+                   </div>
+               </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="waves-effect waves-light btn">Registrar.</button>

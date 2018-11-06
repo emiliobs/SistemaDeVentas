@@ -51,6 +51,25 @@
 
             return userRolesList;
         }
+
+        //aqui contruyo una lista con todos los roles:
+        public List<SelectListItem> GetRoles(RoleManager<IdentityRole> roleManager)
+        {
+            var roles = roleManager.Roles.ToList();
+            roles.ForEach(item => {
+
+                this.userRolesList.Add(new SelectListItem() {
+
+                   Value = item.Id,
+                   Text   = item.Name,
+
+                });
+
+            });
+
+            return userRolesList;
+        }
+
         #endregion
     }
 }
