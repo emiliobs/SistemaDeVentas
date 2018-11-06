@@ -11,12 +11,12 @@
                 <h5>Registrar Usuarios.</h5>
             </center>
             <div class="row">
-                <div class="col s9 m6">
+                <div class="col s9 m4">
                     <div class="card">
                         <div class="card-content white-text">
                             <center>
                                 <span class="card-title blue-grey-text">Foto o Imagen</span>
-                                <output id="foto">
+                                <output id="imagenRegistrar">
                                     <img src="~/images/foto/default.png" alt="Avatar" class="responsive-img" />
                                 </output>
                             </center>
@@ -27,64 +27,68 @@
                                     <div class="btn waves-effect waves-light">
                                         <span>Subir Imagen.</span>
                                         <input type="file" accept="image/*" id="files" name="files" />
+                                        <div class="file-path-wrapper">
+                                        <input class="file-path" type="text"/>
+                                        </div>
                                     </div>
                                     <br />
                                 </div>
                             </a>
+                            <center>
+                                <a>Imagen</a>
+                            </center>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
 
                 <div class="row">
-                    <div class="input-field col s6">
-                        <label asp-for="InputModelRegistrar.Nombre">Nombre:</label>
-                        <input asp-for="InputModelRegistrar.Nombre" placeholder="Nombre." id="nombre" />
-                        <span asp-validation-for="InputModelRegistrar.Nombre" class="text-danger" style="color:red;"></span>
-                    </div>
-                    <div class="input-field col s6">
-                        <label asp-for="InputModelRegistrar.Apellidos">Apellidos:</label>
-                        <input asp-for="InputModelRegistrar.Apellidos" placeholder="Apellidos." id="apellidos" />
-                        <span asp-validation-for="InputModelRegistrar.Apellidos" class="text-danger" style="color:red;"></span>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="input-field col s6">
-                        <label asp-for="InputModelRegistrar.DNI">DNI:</label>
-                        <input asp-for="InputModelRegistrar.DNI" placeholder="DNI." id="dni" />
-                        <span asp-validation-for="InputModelRegistrar.DNI" class="text-danger" style="color:red;"></span>
-                    </div>
-                    <div class="input-field col s6">
-                        <label asp-for="InputModelRegistrar.Telefono">Teléfono:</label>
-                        <input asp-for="InputModelRegistrar.Telefono" placeholder="Teléfono." id="telefono" />
-                        <span asp-validation-for="InputModelRegistrar.Telefono" class="text-danger" style="color:red;"></span>
-                    </div>
-                </div>
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <label asp-for="InputModelRegistrar.Nombre">Nombre:</label>
+                            <input asp-for="InputModelRegistrar.Nombre" placeholder="Nombre." id="nombre" />
+                            <span asp-validation-for="InputModelRegistrar.Nombre" class="text-danger" style="color:red;"></span>
+                        </div>
+                        <div class="input-field col s3">
+                            <label asp-for="InputModelRegistrar.Apellidos">Apellidos:</label>
+                            <input asp-for="InputModelRegistrar.Apellidos" placeholder="Apellidos." id="apellidos" />
+                            <span asp-validation-for="InputModelRegistrar.Apellidos" class="text-danger" style="color:red;"></span>
+                        </div>
+                        <div class="input-field col s3">
+                            <label asp-for="InputModelRegistrar.DNI">DNI:</label>
+                            <input asp-for="InputModelRegistrar.DNI" placeholder="DNI." id="dni" />
+                            <span asp-validation-for="InputModelRegistrar.DNI" class="text-danger" style="color:red;"></span>
+                        </div>
+                        <div class="input-field col s3">
+                            <label asp-for="InputModelRegistrar.Telefono">Teléfono:</label>
+                            <input asp-for="InputModelRegistrar.Telefono" placeholder="Teléfono." id="telefono" />
+                            <span asp-validation-for="InputModelRegistrar.Telefono" class="text-danger" style="color:red;"></span>
+                        </div>
 
-                <div class="row">
-                    <div class="input-field col s6">
-                        <label asp-for="InputModelRegistrar.Email">Email:</label>
-                        <input asp-for="InputModelRegistrar.Email" placeholder="Email." id="email" />
-                        <span asp-validation-for="InputModelRegistrar.Email" class="text-danger" style="color:red;"></span>
+                        <div class="input-field col s3">
+                            <label asp-for="InputModelRegistrar.Email">Email:</label>
+                            <input asp-for="InputModelRegistrar.Email" placeholder="Email." id="email" />
+                            <span asp-validation-for="InputModelRegistrar.Email" class="text-danger" style="color:red;"></span>
+                        </div>
+                        <div class="input-field col s3">
+                            <label asp-for="InputModelRegistrar.Password">Contraseña:</label>
+                            <input asp-for="InputModelRegistrar.Password" placeholder="Contraseña." id="contraseña" />
+                            <span asp-validation-for="InputModelRegistrar.Password" class="text-danger" style="color:red;"></span>
+                        </div>
+
+                        <div class="input-field col s3">
+                            @Html.DropDownList("Role", new SelectList(Model.RoleList, "Value", "Text"), "Seleccione un Role.", null)
+                        </div>  
+                        <div class="input-field col s3">
+                            <button type="submit" class="waves-effect waves-light btn">Registrar.</button>
+                        </div>
                     </div>
-                    <div class="input-field col s6">
-                        <label asp-for="InputModelRegistrar.Password">Contraseña:</label>
-                        <input asp-for="InputModelRegistrar.Password" placeholder="Contraseña." id="contraseña" />
-                        <span asp-validation-for="InputModelRegistrar.Password" class="text-danger" style="color:red;"></span>
-                    </div>
+            @*<div class="modal-footer">
+                
+            </div>*@
                 </div>
-               <div class="row">
-                   <div class="input-field col s12">
-                       @Html.DropDownList("Role", new SelectList(Model.RoleList,"Value","Text"),"[Seleccione un Role.]",null)
-                   </div>
-               </div>
             </div>
-            <div class="modal-footer">
-                <button type="submit" class="waves-effect waves-light btn">Registrar.</button>
-            </div>
+
         </div>
     </form>
 </div>
