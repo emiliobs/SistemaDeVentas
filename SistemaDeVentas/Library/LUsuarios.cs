@@ -87,6 +87,8 @@
            
         }
 
+        //ya no es necesario utilizar este metodo para recuperar el roles yotras informaciones m´´as que se desee
+        //ya utilizo los claims del framework core
         public string UserData(HttpContext httpContext)
         {
             var role = string.Empty;

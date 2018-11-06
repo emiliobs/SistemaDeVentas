@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -33,7 +34,14 @@
             //verifico si un usurio ha iniciado session:
             if (this.signInManager.IsSignedIn(User))
             {
-                ViewData["Roles"] = this.usuarios.UserData(HttpContext);
+
+                //aqui obtengo el role del usurio que inciio session
+                var roles = ClaimTypes.Role;
+                //aqui busco un registro que este almacenado en la proepiedad(aqui solo obtengo el rol)
+                var data = User.Claims.FirstOrDefault(u => u.Type.Equals(roles)).Value;
+                ViewData["Roles"] = data;
+
+                //ViewData["Roles"] = this.usuarios.UserData(HttpContext);
 
                 return View();
             }
