@@ -1,5 +1,6 @@
 ﻿namespace SistemaDeVentas.Library
 {
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using SistemaDeVentas.Data;
@@ -15,6 +16,7 @@
         public UsersRoles usersRole;
         public IdentityError identityError;
         public ApplicationDbContext db;
+        public IHostingEnvironment environment;
         public RoleManager<IdentityRole> roleManager;
         public UserManager<IdentityUser> userManager;
         public SignInManager<IdentityUser> signInManager;

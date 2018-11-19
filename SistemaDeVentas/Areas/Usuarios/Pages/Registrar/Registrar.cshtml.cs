@@ -1,14 +1,19 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SistemaDeVentas.Areas.Usuarios.Models;
 using SistemaDeVentas.Library;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
 {
@@ -24,20 +29,20 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
 
         #region Properties
         [BindProperty]
-        public InputModelRegistrar InputModelRegistrar { get; set; }
-
-        
+        public InputModelRegistrar InputModelRegistrar { get; set; }                   
 
         [Required]
         public string Role { get; set; }
+        public IFormFile AvatarImage { get; set; }
 
         [Display(Name ="Lista de Roles.")]
         public List<SelectListItem> RoleList { get; set; }
         #endregion
 
         #region Contructors
-        public RegistrarModel(RoleManager<IdentityRole> roleManager)
+        public RegistrarModel(RoleManager<IdentityRole> roleManager, IHostingEnvironment environment)
         {
+            listObject.environment = environment;
             listObject.roleManager = roleManager;
             listObject.usuarios = new LUsuarios();
             listObject.usersRole = new UsersRoles();
@@ -61,6 +66,33 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
             //usuarios = new LUsuarios();
 
             //ViewData["Roles"] = usuarios.UserData(HttpContext);
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {                                   
+            try
+            {
+                var imageName = this.InputModelRegistrar.Email + ".png";
+
+                var filePath = Path.Combine(listObject.environment.ContentRootPath, "wwwroot/images/foto", imageName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await AvatarImage.CopyToAsync(stream);
+                }
+
+                
+              
+            }
+            catch (Exception ex)
+            {
+
+               
+                
+            }
+
+
+            return Page();
         }
 
         

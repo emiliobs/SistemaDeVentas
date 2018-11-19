@@ -5,7 +5,7 @@
 }
 
 <div id="" class="container2">
-    <form action="/" method="post" enctype="multipart/form-data">
+    <form  method="post" enctype="multipart/form-data">
         <div class="modal-content" id="myModal">
             <center>
                 <h5>Registrar Usuarios.</h5>
@@ -23,10 +23,10 @@
                         </div>
                         <div class="card-action">
                             <a>
-                                <div class="file-field">
+                                <div class="file-field input-field">
                                     <div class="btn waves-effect waves-light">
                                         <span>Subir Imagen.</span>
-                                        <input type="file" accept="image/*" id="files" name="files" />
+                                        <input asp-for="AvatarImage"   type="file" accept="image/*" id="files" />
                                         <div class="file-path-wrapper">
                                         <input class="file-path" type="text"/>
                                         </div>
