@@ -29,13 +29,13 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
 
         #region Properties
         [BindProperty]
-        public InputModelRegistrar InputModelRegistrar { get; set; }                   
+        public InputModelRegistrar InputModelRegistrar { get; set; }
 
         [Required]
         public string Role { get; set; }
         public IFormFile AvatarImage { get; set; }
 
-        [Display(Name ="Lista de Roles.")]
+        [Display(Name = "Lista de Roles.")]
         public List<SelectListItem> RoleList { get; set; }
         #endregion
 
@@ -44,18 +44,20 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         {
             listObject.environment = environment;
             listObject.roleManager = roleManager;
+            listObject.uploadImage = new UploadImage();
             listObject.usuarios = new LUsuarios();
             listObject.usersRole = new UsersRoles();
 
         }
         #endregion
 
+        #region Methods
         public void OnGet()
         {
 
             RoleList = listObject.usersRole.GetRoles(listObject.roleManager).ToList();
-                                     
-           
+
+
 
             //aqui obtengo el role del usurio que inciio session
             var roles = ClaimTypes.Role;
@@ -69,34 +71,51 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         }
 
         public async Task<IActionResult> OnPostAsync()
-        {                                   
+        {
             try
             {
-                var imageName = this.InputModelRegistrar.Email + ".png";
+                //aqui subo la foto ya con avatar si es nula cuando crea el nuevo usurio:
+                await GuardarImage();
+                //var imageName = this.InputModelRegistrar.Email + ".png";
 
-                var filePath = Path.Combine(listObject.environment.ContentRootPath, "wwwroot/images/foto", imageName);
+                //var filePath = Path.Combine(listObject.environment.ContentRootPath, "wwwroot/images/foto", imageName);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await AvatarImage.CopyToAsync(stream);
-                }
+                //using (var stream = new FileStream(filePath, FileMode.Create))
+                //{
+                //    await AvatarImage.CopyToAsync(stream);
+                //}
 
-                
-              
+
+
             }
             catch (Exception ex)
             {
 
-               
-                
+
+
             }
 
 
             return Page();
         }
 
-        
+        private async Task GuardarImage()
+        {
+            try
+            {
+                var imageName = InputModelRegistrar.Email + ".png";
+
+                await listObject.uploadImage.CopiarImagenAsync(AvatarImage, imageName, listObject.environment);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }         
+        #endregion
+
     }
 
-    
+
 }

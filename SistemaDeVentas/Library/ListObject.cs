@@ -12,6 +12,7 @@
         public string description, code;
         public List<SelectListItem> userRolesList;
         public LUsuarios usuarios;
+        public UploadImage uploadImage;
         public UserData usersData;
         public UsersRoles usersRole;
         public IdentityError identityError;

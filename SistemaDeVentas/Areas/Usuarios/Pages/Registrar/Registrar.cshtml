@@ -67,25 +67,25 @@
 
                         <div class="input-field col s3">
                             <label asp-for="InputModelRegistrar.Email">Email:</label>
-                            <input asp-for="InputModelRegistrar.Email" placeholder="Email." id="email" />
+                            <input asp-for="InputModelRegistrar.Email"  placeholder="Email." id="email" />
                             <span asp-validation-for="InputModelRegistrar.Email" class="text-danger" style="color:red;"></span>
                         </div>
                         <div class="input-field col s3">
                             <label asp-for="InputModelRegistrar.Password">Contraseña:</label>
-                            <input asp-for="InputModelRegistrar.Password" placeholder="Contraseña." id="contraseña" />
+                            <input asp-for="InputModelRegistrar.Password"  placeholder="Contraseña." id="contraseña" />
                             <span asp-validation-for="InputModelRegistrar.Password" class="text-danger" style="color:red;"></span>
                         </div>
 
                         <div class="input-field col s3">
                             @Html.DropDownList("Role", new SelectList(Model.RoleList, "Value", "Text"), "Seleccione un Role.", null)
                         </div>  
-                        <div class="input-field col s3">
+                        <div class="input-field col s3 center">
                             <button type="submit" class="waves-effect waves-light btn">Registrar.</button>
                         </div>
                     </div>
-            @*<div class="modal-footer">
+            <div class="modal-footer">
                 
-            </div>*@
+            </div>
                 </div>
             </div>
 
