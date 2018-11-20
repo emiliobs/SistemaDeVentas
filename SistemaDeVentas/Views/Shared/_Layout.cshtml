@@ -28,6 +28,8 @@
             @*aqui verifico si un usuario esta iniciando sesión*@
             @if (SignInManager.IsSignedIn(User))
             {
+              
+
                 <div id="menuNavBar1">
                     <ul class="right hide-on-med-and-down">
                         <a asp-area="Usuarios" asp-action="SessionClose" asp-controller="Usuarios">Salir.</a>

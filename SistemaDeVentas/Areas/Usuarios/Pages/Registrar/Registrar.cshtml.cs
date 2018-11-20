@@ -31,22 +31,25 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         [BindProperty]
         public InputModelRegistrar InputModelRegistrar { get; set; }
 
-        [Required]
-        public string Role { get; set; }
+        
         public IFormFile AvatarImage { get; set; }
 
-        [Display(Name = "Lista de Roles.")]
-        public List<SelectListItem> RoleList { get; set; }
+       
+
+        [TempData]
+        public string ErrorMessage { get; set; }
         #endregion
 
         #region Contructors
-        public RegistrarModel(RoleManager<IdentityRole> roleManager, IHostingEnvironment environment)
+        public RegistrarModel(RoleManager<IdentityRole> roleManager, IHostingEnvironment environment, UserManager<IdentityUser> userManager)
         {
             listObject.environment = environment;
+            listObject.userManager = userManager;
             listObject.roleManager = roleManager;
             listObject.uploadImage = new UploadImage();
             listObject.usuarios = new LUsuarios();
             listObject.usersRole = new UsersRoles();
+            listObject.userRolesList = new List<SelectListItem>();
 
         }
         #endregion
@@ -55,14 +58,21 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         public void OnGet()
         {
 
-            RoleList = listObject.usersRole.GetRoles(listObject.roleManager).ToList();
+            InputModelRegistrar = new InputModelRegistrar
+            {
+
+                RoleList = listObject.usersRole.GetRoles(listObject.roleManager).ToList(),
+
+        };
+
+            
 
 
 
             //aqui obtengo el role del usurio que inciio session
-            var roles = ClaimTypes.Role;
+            var role = ClaimTypes.Role;
             //aqui busco un registro que este almacenado en la proepiedad(aqui solo obtengo el rol)
-            var data = User.Claims.FirstOrDefault(u => u.Type.Equals(roles)).Value;
+            var data = User.Claims.FirstOrDefault(u => u.Type.Equals(role)).Value;
             ViewData["Roles"] = data;
 
             //usuarios = new LUsuarios();
@@ -74,6 +84,9 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         {
             try
             {
+
+               
+
                 //aqui subo la foto ya con avatar si es nula cuando crea el nuevo usurio:
                 await GuardarImage();
                 //var imageName = this.InputModelRegistrar.Email + ".png";
@@ -89,12 +102,8 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
 
             }
             catch (Exception ex)
-            {
-
-
-
-            }
-
+            { 
+            }              
 
             return Page();
         }
@@ -102,15 +111,56 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         private async Task GuardarImage()
         {
             try
-            {
-                var imageName = InputModelRegistrar.Email + ".png";
+            {                     
+            
+                listObject.userRolesList.Add(new SelectListItem
+                {
+                    Text = InputModelRegistrar.Role,
+                });
 
-                await listObject.uploadImage.CopiarImagenAsync(AvatarImage, imageName, listObject.environment);
+
+                var userList = listObject.userManager.Users.Where(u => u.Email.Equals(InputModelRegistrar.Email)).ToList();
+                if (userList.Count.Equals(0))
+                {
+                    var imageName = InputModelRegistrar.Email + ".png";
+
+                    var user = new IdentityUser()
+                    {
+                        UserName = InputModelRegistrar.Email,
+                        Email = InputModelRegistrar.Email,
+                        PhoneNumber = InputModelRegistrar.Telefono,
+                    };
+
+                    //aqui salvo a la bd:
+                    var result = await listObject.userManager.CreateAsync(user, InputModelRegistrar.Password);
+                    if (result.Succeeded)
+                    {
+                       
+                    }   
+                    else
+                    {
+                        var query = from u in result.Errors select u;
+                        foreach (var usuarioResult in query)
+                        {
+                            ErrorMessage = usuarioResult.Description;
+                            InputModelRegistrar.RoleList = listObject.userRolesList;
+                        }
+                    }
+                    await listObject.uploadImage.CopiarImagenAsync(AvatarImage, imageName, listObject.environment);
+                }
+                else
+                {
+                    ErrorMessage = $"El {InputModelRegistrar.Email} ya esta registrado";
+                    InputModelRegistrar.RoleList = listObject.userRolesList;
+                }
+
+            
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                this.ErrorMessage = ex.Message;
+                InputModelRegistrar.RoleList = listObject.userRolesList;
             }
         }         
         #endregion

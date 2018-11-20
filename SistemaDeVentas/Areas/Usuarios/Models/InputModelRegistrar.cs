@@ -1,5 +1,6 @@
 ﻿namespace SistemaDeVentas.Areas.Usuarios.Models
 {
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -34,5 +35,10 @@
         [DataType(DataType.Password)]
         [StringLength(100,MinimumLength =6)]
         public string Password { get; set; }
+
+        [Required]
+        public string Role { get; set; }
+        [Display(Name = "Lista de Roles.")]
+        public List<SelectListItem> RoleList { get; set; }
     }
 }
