@@ -5,7 +5,7 @@
 }
 
 <div id="" class="container2">
-    <form  method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         <div class="modal-content" id="myModal">
             <center>
                 <h5>Registrar Usuarios.</h5>
@@ -26,9 +26,9 @@
                                 <div class="file-field input-field">
                                     <div class="btn waves-effect waves-light">
                                         <span>Subir Imagen.</span>
-                                        <input asp-for="AvatarImage"   type="file" accept="image/*" id="files" />
+                                        <input asp-for="AvatarImage" type="file" accept="image/*" id="files" />
                                         <div class="file-path-wrapper">
-                                        <input class="file-path" type="text"/>
+                                            <input class="file-path" type="text" />
                                         </div>
                                     </div>
                                     <br />
@@ -67,34 +67,38 @@
 
                         <div class="input-field col s3">
                             <label asp-for="InputModelRegistrar.Email">Email:</label>
-                            <input asp-for="InputModelRegistrar.Email"  placeholder="Email." id="email" />
+                            <input asp-for="InputModelRegistrar.Email" placeholder="Email." id="email" />
                             <span asp-validation-for="InputModelRegistrar.Email" class="text-danger" style="color:red;"></span>
                         </div>
                         <div class="input-field col s3">
                             <label asp-for="InputModelRegistrar.Password">Contraseña:</label>
-                            <input asp-for="InputModelRegistrar.Password"  placeholder="Contraseña." id="contraseña" />
+                            <input asp-for="InputModelRegistrar.Password" placeholder="Contraseña." id="contraseña" />
                             <span asp-validation-for="InputModelRegistrar.Password" class="text-danger" style="color:red;"></span>
                         </div>
 
                         <div class="input-field col s3">
-                            @Html.DropDownList("Role", new SelectList(Model.InputModelRegistrar.RoleList, "Text", "Text"), "Seleccione un Role.", null)
-                        </div>  
+                            @Html.DropDownList("InputModelRegistrar.Role", new SelectList(Model.InputModelRegistrar.RoleList, "Text", "Text"), "Seleccione un Role.", null)
+                        </div>
                         <div class="input-field col s3 center">
                             <button type="submit" class="waves-effect waves-light btn">Registrar.</button>
                         </div>
                     </div>
-            <div class="modal-footer">
-                <label id="Message" class="red-text text-darken-4">@Html.DisplayFor(m => m.ErrorMessage)</label>
-            </div>
+                    <div class="modal-footer">
+                        <label id="Message" class="red-text text-darken-4">@Html.DisplayFor(m => m.ErrorMessage)</label>
+                    </div>
                 </div>
             </div>
 
         </div>
     </form>
+
+   
 </div>
 
 @section Scripts{
 
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
+
 }
+

@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SistemaDeVentas.Areas.Usuarios.Controllers;
 using SistemaDeVentas.Areas.Usuarios.Models;
+using SistemaDeVentas.Data;
 using SistemaDeVentas.Library;
 using System;
 using System.Collections.Generic;
@@ -19,8 +21,6 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
 {
     public class RegistrarModel : PageModel
     {
-
-
         #region Atributtes
         private ListObject listObject = new ListObject();
 
@@ -28,24 +28,23 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
         #endregion
 
         #region Properties
+
         [BindProperty]
         public InputModelRegistrar InputModelRegistrar { get; set; }
-
-        
         public IFormFile AvatarImage { get; set; }
-
-       
 
         [TempData]
         public string ErrorMessage { get; set; }
         #endregion
 
         #region Contructors
-        public RegistrarModel(RoleManager<IdentityRole> roleManager, IHostingEnvironment environment, UserManager<IdentityUser> userManager)
+        public RegistrarModel(RoleManager<IdentityRole> roleManager, ApplicationDbContext db, IHostingEnvironment environment, UserManager<IdentityUser> userManager)
         {
             listObject.environment = environment;
             listObject.userManager = userManager;
             listObject.roleManager = roleManager;
+            listObject.db = db;
+
             listObject.uploadImage = new UploadImage();
             listObject.usuarios = new LUsuarios();
             listObject.usersRole = new UsersRoles();
@@ -63,11 +62,7 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
 
                 RoleList = listObject.usersRole.GetRoles(listObject.roleManager).ToList(),
 
-        };
-
-            
-
-
+            };
 
             //aqui obtengo el role del usurio que inciio session
             var role = ClaimTypes.Role;
@@ -85,34 +80,8 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
             try
             {
 
-               
-
-                //aqui subo la foto ya con avatar si es nula cuando crea el nuevo usurio:
-                await GuardarImage();
-                //var imageName = this.InputModelRegistrar.Email + ".png";
-
-                //var filePath = Path.Combine(listObject.environment.ContentRootPath, "wwwroot/images/foto", imageName);
-
-                //using (var stream = new FileStream(filePath, FileMode.Create))
-                //{
-                //    await AvatarImage.CopyToAsync(stream);
-                //}
 
 
-
-            }
-            catch (Exception ex)
-            { 
-            }              
-
-            return Page();
-        }
-
-        private async Task GuardarImage()
-        {
-            try
-            {                     
-            
                 listObject.userRolesList.Add(new SelectListItem
                 {
                     Text = InputModelRegistrar.Role,
@@ -135,18 +104,39 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
                     var result = await listObject.userManager.CreateAsync(user, InputModelRegistrar.Password);
                     if (result.Succeeded)
                     {
-                       
-                    }   
+                        await listObject.userManager.AddToRoleAsync(user, InputModelRegistrar.Role);
+                        //aqui obtengo todos los usurio que esten registrado:
+                        var listUser = listObject.userManager.Users.ToList();
+                        var count = listUser.Count();
+                        count--;
+                        var usuario = new TUsuario()
+                        {
+
+                            Nombre = InputModelRegistrar.Nombre,
+                            Apellidos = InputModelRegistrar.Apellidos,
+                            IdUser = listUser[count].Id,
+                            Imagen = InputModelRegistrar.Email,
+                            NID = InputModelRegistrar.DNI,
+
+                        };
+
+                        await listObject.db.AddAsync(usuario);
+                        await listObject.db.SaveChangesAsync();
+                        // await listObject.uploadImage.CopiarImagenAsync(AvatarImage,imageName, listObject.environment);
+                        await listObject.uploadImage.CopiarImagenAsync(AvatarImage, imageName, listObject.environment);
+
+                        return RedirectToAction(nameof(UsuariosController.Index), "Usuarios");
+                    }
                     else
                     {
-                        var query = from u in result.Errors select u;
-                        foreach (var usuarioResult in query)
+                        //var query = from u in result.Errors select u;
+                        foreach (var usuarioResult in result.Errors)
                         {
                             ErrorMessage = usuarioResult.Description;
                             InputModelRegistrar.RoleList = listObject.userRolesList;
                         }
                     }
-                    await listObject.uploadImage.CopiarImagenAsync(AvatarImage, imageName, listObject.environment);
+
                 }
                 else
                 {
@@ -154,7 +144,7 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
                     InputModelRegistrar.RoleList = listObject.userRolesList;
                 }
 
-            
+
             }
             catch (Exception ex)
             {
@@ -162,7 +152,12 @@ namespace SistemaDeVentas.Areas.Usuarios.Pages.Registrar
                 this.ErrorMessage = ex.Message;
                 InputModelRegistrar.RoleList = listObject.userRolesList;
             }
-        }         
+                  
+
+            return Page();
+        }
+
+      
         #endregion
 
     }
